@@ -16,13 +16,10 @@ app.get('/', (req,res) => res.render('index', {title: 'Account Summary', account
 app.get('/savings', (req,res) => res.render('account', {account: accounts.savings}));
 app.get('/checking', (req,res) => res.render('account', {account: accounts.checking}));
 app.get('/credit', (req,res) => res.render('account', {account: accounts.credit}));
-app.get('/profile', (req, res) => res.render('profile', {user: users[0]}));
 app.get('/transfer', (req, res) => res.render('transfer'));
 app.post('/transfer', (req, res) => {
-    accounts[req.body.from].balance = accounts[req.body.from].balance - 
-            req.body.amount;
-    accounts[req.body.to].balance = parseInt(accounts[req.body.to].balance) + 
-            parseInt(req.body.amount, 10);
+    accounts[req.body.from].balance -= req.body.amount;
+    accounts[req.body.to].balance += parseInt(req.body.amount, 10);
     writeJSON();
     res.render('transfer', {message: 'Transfer Completed'});
 });
@@ -33,5 +30,7 @@ app.post('/payment', (req, res) => {
     writeJSON();
     res.render('payment', { message: 'Payment Successful', account: accounts.credit});
 })
+
+app.get('/profile', (req, res) => res.render('profile', {user: users[0]}));
 
 app.listen(3000, () => {console.log("PS Project Running on port 3000!")});
